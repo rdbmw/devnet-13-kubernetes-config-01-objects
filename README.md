@@ -13,7 +13,7 @@
 
 На основе 13-kubernetes-config создаем образы [frontend](https://hub.docker.com/r/rdbmw/front-app) и [backend](https://hub.docker.com/r/rdbmw/back-app) загружаем их на hub.docker.com для дальнейшего использования в манифестах.
 
-Далее, описываем манифесты:
+Далее, создаем манифесты:
 - [stage_ns.yml](src/stage/stage_ns.yml) для создания Namespace stage.
 - [statefulset.yml](src/stage/statefulset.yml) для создания StatefulSet на основе образа с БД Postgres.
 - [service_db.yml](src/stage/service_db.yml) - Service для возможности доступа бэкенда к БД. 
@@ -49,5 +49,24 @@
 
 ### Ответ
 
-Используем те же образы [frontend](https://hub.docker.com/r/rdbmw/front-app) и [backend](https://hub.docker.com/r/rdbmw/back-app),  
+Используем те же образы [frontend](https://hub.docker.com/r/rdbmw/front-app) и [backend](https://hub.docker.com/r/rdbmw/back-app) и описываем ресурсы:
+- [prod_ns.yml](src/prod/prod_ns.yml) для создания Namespace prod.
+- [statefulset.yml](src/prod/statefulset.yml) для создания StatefulSet на основе образа с БД Postgres.
+- [service_db.yml](src/prod/service_db.yml) - Service для возможности доступа бэкенда к БД. 
+- [deployment_back.yml](src/prod/deployment_back.yml) - описываем Deployment для бэкенда.
+- [service_back.yml](src/prod/service_back.yml) - Service для возможности доступа фронтенда к бэкенду.
+- [deployment_front.yml](src/prod/deployment_front.yml) - описываем Deployment для фронтенда.
 
+Применяем манифесты через ```kubectl apply -f``` и проверяем, что все ресурсы созданы и работают.
+
+![Скриншот](img/Task2_1.png)
+
+Проверим, что бэкенд успешно подключился к БД и сгенерировал демо-данные.
+
+![Скриншот](img/Task2_2.png)
+
+Проверим, что из фронтенду доступно api бекенда
+
+![Скриншот](img/Task2_3.png)
+
+Проверим, что фронтенд отвечает
